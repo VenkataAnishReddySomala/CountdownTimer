@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .timer {
+            font-size: 36px;
+            margin: 20px 0;
+        }
+        .buttons {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">00:00:00</div>
+    <div class="buttons">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="stopTimer()">Stop</button>
+        <button onclick="resetTimer()">Reset</button>
+        <button onclick="restartTimer()">Restart</button>
+    </div>
+
+    <script>
+        let timerInterval;
+        let startTime;
+        let running = false;
+
+        function startTimer() {
+            if (!running) {
+                startTime = Date.now() - (startTime ? startTime : 0);
+                timerInterval = setInterval(updateTimer, 1000);
+                running = true;
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            running = false;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timer').textContent = '00:00:00';
+            startTime = undefined;
+            running = false;
+        }
+
+        function restartTimer() {
+            resetTimer();
+            startTimer();
+        }
+
+        function updateTimer() {
+            const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+            const hours = Math.floor(elapsedTime / 3600);
+            const minutes = Math.floor((elapsedTime % 3600) / 60);
+            const seconds = elapsedTime % 60;
+            const formattedTime = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+            document.getElementById('timer').textContent = formattedTime;
+        }
+
+        function formatTime(value) {
+            return value < 10 ? `0${value}` : value;
+        }
+    </script>
+</body>
+</html>
